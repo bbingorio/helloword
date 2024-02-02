@@ -20,6 +20,7 @@
 
 <!-- Importa o JavaScript do tema -->
 <script src="assets/js/global.js"></script>
+<script src="assets/js/global.js"></script>
 </body>
 
 </html>
