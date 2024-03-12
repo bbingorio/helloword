@@ -122,7 +122,7 @@ nav {
 }
 
 nav a {
-    padding: 1rem;
+    padding: 1rem .5rem;
     text-align: center;
     color: black;
     display: flex;
@@ -186,11 +186,14 @@ footer>div>a {
     font-size: small;
 }
 
-
 /* Classes de uso geral */
-.red { color: red; }
+.red {
+    color: red;
+}
 
-.center { text-align: center; }
+.center {
+    text-align: center;
+}
 
 /* Elementos de formulários */
 input,
@@ -262,4 +265,10 @@ Telas de 425px ou mais...
         margin-right: .35rem;
     }
 
+}
+
+/* Oculta elementos de login do usuario por padrão */
+
+#userImg, #userIcon {
+    display: none;
 }

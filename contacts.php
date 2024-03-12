@@ -3,13 +3,6 @@
 // Carrega configurações globais
 require("_global.php");
 
-// Teste para evitar reenvio do formulário
-header("Expires: 0");
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-
 /**
  * A super global $_POST[] recebe os dados de um formulário submetido pelo método POST.
  **/
@@ -116,7 +109,7 @@ SQL;
         $stmt->execute();
 
         // Confirma para o remetente que formulário foi enviado 
-        $sended = true;
+        header("Location: contactok.php?name={$form['name']}");
 
     // Se ocorreram erros no preenchimento do formulário
     else :
@@ -145,69 +138,54 @@ require('_header.php');
     <h2>Faça Contato</h2>
 
     <?php
-    // Se o formulário fou submetido, exibe um feedback para o remetente
-    if ($sended) :
-        // Extrai somente o primeiro nome do remetente
-        $allnames = explode(" ", $_POST['name']);
-        $firstname = $allnames[0];
+    // Se ocorreram erros, exibe a caixa de mensagem
+    if ($error != '')
+        echo '<div id="error">' . $error . '</div>';
     ?>
 
-        <h3>Olá <?php echo $firstname ?>!</h3>
-        <p>Seu contato foi enviado com sucesso.</p>
-        <p><em>Obrigado...</em></p>
-        <p class="center">
-            <button onclick="location.href='contacts.php'" type="button">Enviar outro contato</button>
+    <form id="contact" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
+
+        <?php // Campo oculto para detectar se o formulário foi enviado 
+        ?>
+        <input type="hidden" name="send" value="">
+
+        <p>Preencha todos os campos do formulário para enviar um contato para a equipe do <strong><?php echo $site['sitename'] ?></strong>.</p>
+        <p class="center red"><small>Todos os campos são obrigatórios.</small></p>
+
+        <p>
+            <label for="name">Nome:</label>
+            <input type="text" name="name" id="name" placeholder="Seu nome completo." value="<?php echo $form['name'] ?>" required minlength="3">
         </p>
 
-    <?php
-    // Se o formulário NÃO foi submetido, exibe ele novamente
-    else :
+        <p>
+            <label for="email">E-mail:</label>
+            <input type="email" name="email" id="email" placeholder="usuario@provedor.com" value="<?php echo $form['email'] ?>" required>
+        </p>
 
-        // Se ocorreram erros, exibe a caixa de mensagem
-        if ($error != '')
-            echo '<div id="error">' . $error . '</div>';
-    ?>
+        <p>
+            <label for="subject">Assunto:</label>
+            <input type="text" name="subject" id="subject" placeholder="Sobre o que deseja escrever" value="<?php echo $form['subject'] ?>" required minlength="4">
+        </p>
 
-        <form id="contact" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
+        <p>
+            <label for="message">Mensagem:</label>
+            <textarea name="message" id="message" placeholder="Escreva sua mensagem aqui" required minlength="5"><?php echo $form['message'] ?></textarea>
+        </p>
 
-            <?php // Campo oculto para detectar se o formulário foi enviado 
-            ?>
-            <input type="hidden" name="send" value="">
+        <p>
+            <button type="submit">Enviar</button>
+        </p>
 
-            <p>Preencha todos os campos do formulário para enviar um contato para a equipe do <strong><?php echo $site['sitename'] ?></strong>.</p>
-            <p class="center red"><small>Todos os campos são obrigatórios.</small></p>
-
-            <p>
-                <label for="name">Nome:</label>
-                <input type="text" name="name" id="name" placeholder="Seu nome completo." value="<?php echo $form['name'] ?>" required minlength="3">
-            </p>
-
-            <p>
-                <label for="email">E-mail:</label>
-                <input type="email" name="email" id="email" placeholder="usuario@provedor.com" value="<?php echo $form['email'] ?>" required>
-            </p>
-
-            <p>
-                <label for="subject">Assunto:</label>
-                <input type="text" name="subject" id="subject" placeholder="Sobre o que deseja escrever" value="<?php echo $form['subject'] ?>" required minlength="4">
-            </p>
-
-            <p>
-                <label for="message">Mensagem:</label>
-                <textarea name="message" id="message" placeholder="Escreva sua mensagem aqui" required minlength="5"><?php echo $form['message'] ?></textarea>
-            </p>
-
-            <p>
-                <button type="submit">Enviar</button>
-            </p>
-
-        </form>
-
-    <?php endif ?>
+    </form>
 
 </article>
 
-<aside></aside>
+<aside>
+    <?php
+    // Lista de redes sociais
+    require('widgets/_socialaside.php');
+    ?>
+</aside>
 
 <?php
 // Inclui o rodapé do documento
