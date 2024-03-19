@@ -1,64 +1,50 @@
-// Seleciona os elementos do HTML para interação
-const userName = document.getElementById('userName');
-const userCard = document.getElementById('userCard');
-const btnGoogleProfile = document.getElementById('btnGoogleProfile');
-const btnLogout = document.getElementById('btnLogout');
+<?php
 
-// Monitora se houve mudanças na autenticação do usuário
-firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-        // Se alguém se logou, faça isso:
-        // Chama a função que exibe o card do usuário logado
-        showUserCard(user);
-        // Monitora cliques no botão de perfil
-        btnGoogleProfile.addEventListener('click', viewProfile);
-        // Monitora cliques no botão de logout
-        btnLogout.addEventListener('click', fbLogout);
-    } else {
-        // Se alguém deslogou, faça isso:
-        // Obtém o parâmetro do link da página
-        var searchParams = new URLSearchParams(window.location.search);
-        // Obtém o valor do parâmetro "ref"
-        var refValue = searchParams.get('ref');
-        // Redireciona para a página de origem
-        location.href = refValue ? refValue : 'index.php';
-    }
-});
+// Carrega configurações globais
+require("_global.php");
 
-// Função que exibe o card do usuário logado
-function showUserCard(user) {
+// Configurações desta página
+$page = array(
+    "title" => "Perfil do Usuário",
+    "css" => "profile.css",
+    "js" => "profile.js"
+);
 
-    // Converte as datas para pt-br
-    var createdDateBr = convertTimestampToDateFormat(user.metadata.creationTime);
-    var lastSignInBr = convertTimestampToDateFormat(user.metadata.lastSignInTime);
+// Inclui o cabeçalho do documento
+require('_header.php');
+?>
 
-    // Variável com a view do card
-    var userCardData = `
-    
-<img src="${user.photoURL}" alt="${user.displayName}" referrerpolicy="no-referrer">
-<h4>${user.displayName}</h4>
-<ul>
-    <li>E-mail: ${user.email}</li>
-    <li>Cadastrado em ${createdDateBr}</li>
-    <li>Último login em ${lastSignInBr}</li>
-</ul>
-    
-    `;
+<article>
 
-    // Envia a variável para a view
-    userCard.innerHTML = userCardData;
+    <h2>Olá <span id="userName">usuário</span>!</h2>
 
-    // Exibe a view
-    userCard.style.display = 'block';
+    <div id="userCard"></div>
 
-}
+    <p>Sua conta é gerenciada pelo Google. Clique no botão abaixo para acessar seu perfil no Google.</p>
 
-// Exibe o perfil do usuário no Google
-function viewProfile() {
-    window.open('https://myaccount.google.com/', '_blank');
-}
+    <p class="center">
+        <button type="button" id="btnGoogleProfile">
+            <i class="fa-brands fa-google fa-fw"></i>
+            Acessar perfil no Google
+        </button>
+    </p>
 
-// Faz logout do usuário atual
-function fbLogout() {
+    <p>Clique no botão abaixo se quise sair do aplicativo.</p>
 
-}
+    <p class="center">
+        <button type="button" id="btnLogout">
+        <i class="fa-solid fa-right-from-bracket fa-fw"></i>
+            Logout / Sair
+        </button>
+    </p>
+
+</article>
+
+<aside>
+    <h3>+ para você</h3>
+</aside>
+
+<?php
+// Inclui o rodapé do documento
+require('_footer.php');
+?>
