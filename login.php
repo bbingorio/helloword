@@ -5,7 +5,7 @@ require("_global.php");
 
 // Configurações desta página
 $page = array(
-    "title" => "Logue-se",
+    "title" => "Login / Entrar",
     "css" => "login.css",
     "js" => "login.js"
 );
@@ -14,7 +14,19 @@ $page = array(
 require('_header.php');
 ?>
 
-<article></article>
+<article>
+    <h2>Login / Entrar</h2>
+    <p>Logue-se para ter acesso aos recursos restritos do site.</p>
+    <p>Use sua conta Google / Gmail.</p>
+    <p id="loginError" class="red"></p>
+    <p class="center">
+        <button type="button" id="btnLogin">
+            <i class="fa-brands fa-google fa-fw"></i>
+            &nbsp; 
+            Logue-se com o Google
+        </button>
+    </p>
+</article>
 
 <aside></aside>
 
